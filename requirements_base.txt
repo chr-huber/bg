@@ -1,0 +1,9 @@
+Django==1.11.2
+django-idmap==1.0.3
+django-vanilla-views==1.0.4
+numpy==1.15.0
+otree==2.1.9
+otree-boto2-shim==0.3.2
+otree-core==0.0.0b1
+otree-save-the-change==1.1.3
+scipy==1.1.0
