@@ -5,4 +5,5 @@ This oTree app allows researchers to implement the Bubble Game by Moinas and Pou
 ### Links
 - [License](https://chr-huber.github.io/downloads/bg/License.pdf "license")
 - [Documentation](https://chr-huber.github.io/downloads/bg/Documentation.pdf "documentation")
+- [Multi-Language Support](https://chr-huber.github.io/downloads/bg/MultiLanguageSupport.pdf "multi-language support")
 - [Demo](http://ch-bg-demo.herokuapp.com "demo")
