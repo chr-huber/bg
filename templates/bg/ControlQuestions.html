@@ -1,0 +1,152 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+{% load humanize %}
+{% load i18n %}
+
+
+{#--- SCRIPTS --------------------------------------------------------------------------------------------------------#}
+
+{% block scripts %}
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock %}
+
+
+{#--- STYLES ---------------------------------------------------------------------------------------------------------#}
+
+{% block styles %}
+    <link href="{% static 'bg/css/custom.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+
+{#--- TITLE ----------------------------------------------------------------------------------------------------------#}
+
+{% block title %}
+    {% trans "Questionnaire" %}
+{% endblock %}
+
+
+{#--- CONTENT --------------------------------------------------------------------------------------------------------#}
+
+{% block content %}
+
+    <div class="card">
+
+        <div class="card-header">
+            {% blocktrans trimmed %}
+                Please answer the following questions.
+            {% endblocktrans %}
+            {% if controlquestions_correct %}
+                <br>
+                {% blocktrans trimmed %}
+                    The game can only start when each player of the group has correctly answered all questions.
+                {% endblocktrans %}
+            {% endif %}
+        </div>
+
+        <div class="card-body">
+
+            <!-- Question Table -->
+            <div class="table-responsive">
+            <table class="table tablewithradios">
+                {% for item, id, question, answer0, answer1, correct in cq %}
+                    <tr>
+                        <td class="top">
+                            <i>Q{{ id }}:</i>
+                        </td>
+                        <td class="top"></td>
+                        <td class="top">
+                            {{ question }}
+                        </td>
+                        <td  class="top"colspan="4"></td>
+                        <td class="formfield top">
+                            <input type="radio" name="cq_{{ id }}" id="cq_{{ id }}a" value="0" required>
+                        </td>
+                        <td class="option_right top">
+                            <label class="btn btn-light" for="cq_{{ id }}a">
+                                {{ answer0 }}
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bottom" colspan="7"></td>
+                        <td class="formfield bottom">
+                            <input type="radio" name="cq_{{ id }}" id="cq_{{ id }}b" value="1" required>
+                        </td>
+
+                        <td class="option_right bottom">
+                            <label class="btn btn-light" for="cq_{{ id }}b">
+                                {{ answer1 }}
+                            </label>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                {% for item, id, question, answer0, answer1, answer2, answer3, correct in cq1 %}
+                    <tr>
+                        <td class="top">
+                            <i>Q{{ id }}:</i>
+                        </td>
+                        <td class="top"></td>
+                        <td class="top">
+                            {{ question }}
+                        </td>
+                        <td class="top" colspan="4"></td>
+                        <td  class="formfield top topradio">
+                            <input type="radio" name="cq_{{ id }}" id="{{ item }}a" value="0" required>
+                        </td>
+                        <td class="option_right top topradio">
+                            <label class="btn btn-light radiolabel" for="{{ item }}a">
+                                {{ answer0 }}
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7"></td>
+                        <td  class="formfield">
+                            <input type="radio" name="cq_{{ id }}" id="{{ item }}b" value="1" required>
+                        </td>
+                        <td class="option_right">
+                            <label class="btn btn-light radiolabel" for="{{ item }}b">
+                                {{ answer1 }}
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7"></td>
+                        <td  class="formfield">
+                            <input type="radio" name="cq_{{ id }}" id="{{ item }}c" value="2" required>
+                        </td>
+                        <td class="option_right">
+                            <label class="btn btn-light radiolabel" for="{{ item }}c">
+                                {{ answer2 }}
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="bottom"></td>
+                        <td  class="formfield bottom">
+                            <input type="radio" name="cq_{{ id }}" id="{{ item }}d" value="3" required>
+                        </td>
+                        <td class="option_right bottom">
+                            <label class="btn btn-light radiolabel" for="{{ item }}d">
+                                {{ answer3 }}
+                            </label>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="text-align: right; padding-top: 5px">
+        {% next_button %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,252 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+{% load humanize %}
+{% load i18n %}
+
+
+{#--- SCRIPTS --------------------------------------------------------------------------------------------------------#}
+
+{% block scripts %}
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock %}
+
+
+{#--- STYLES ---------------------------------------------------------------------------------------------------------#}
+
+{% block styles %}
+    <link href="{% static 'bg/css/custom_instructions.css' %}" rel="stylesheet"/>
+    <link href="{% static 'bg/css/custom.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+
+{#--- TITLE ----------------------------------------------------------------------------------------------------------#}
+
+{% block title %}
+    {% trans "Instructions" %}
+{% endblock %}
+
+
+{#--- CONTENT --------------------------------------------------------------------------------------------------------#}
+
+{% block content %}
+    <!--
+        The instructions below are taken from Moinas and Pouget (2013),
+        Econometrica 81(4): 1507-1539.
+    -->
+<!--
+    <div class="wrapper instructions">
+-->
+    <div class="card">
+    <div class="card-body">
+        {% blocktrans trimmed %}
+            <p class="instrheading">
+                Exchange Process
+            </p>
+            <p class="instrpar">
+                To play this game, we form groups of three players. Each player is endowed with 1 euro that can be used
+                to buy an asset. Your task during the game is thus to choose whether you want to buy the asset. This
+                asset does not generate any dividend. If the asset price exceeds 1 euro, you can still buy the asset. We
+                indeed consider that a financial partner (who is not part of the game) provides you with the additional
+                capital and shares profits with you according to the respective capital invested. The market proceeds
+                sequentially. The first player is offered the opportunity to buy at a price P1.
+                If he buys, he proposes to sell the asset to the second player at a price that is 10 times higher,
+                P2=10×P1. If the second player agrees to buy, the first player ends up the game with 10 euros.
+                The second player then proposes to sell the asset to the third trader at a price
+                P3=10×P2 =100×P1 . If the third player buys the asset, the second player ends up the game with 10 euros.
+                The third player does not find anyone to whom he can sell the asset. Since this asset does not generate
+                any dividend, he ends up the game with 0 euros. This game is summarized in the following figure.
+            </p>
+        {% endblocktrans %}
+
+        <!-- Game Tree  horizontal -->
+        {% if graph == 'horizontal' %}
+            <div style="margin-left: 20px; margin-right: auto">
+                <svg width="800px" height="230px" style="transform: scale(0.9)">
+
+                    <!-- nodes -->
+                    {% for index, price, xpoint in GameTree %}
+                        <a data-toggle="tooltip" data-placement="top" title="{{ tooltip_price }}">
+                            <text class="gtprice" x="{{ xpoint }}" y="40" fill="black" font-size="{{ font_size_price }}">{% trans "Price" %} {{ index }}</text>
+                        </a>
+                        <circle cx="{{ xpoint|add:5 }}" cy="50" r="5" fill="black" />
+                        <polyline points="{{ xpoint }},50 {{ xpoint|add:add_to_last_price }},50" style="fill: none; stroke: black"/>
+                        <text x="{{ xpoint|add:place_of_buy }}" y="65" fill="black" font-size="{{ font_size_buy }}">buy</text>
+                    {% endfor %}
+
+                    <!-- outcomes -->
+                    {% for index, price, xpoint in GameTree %}
+                        <polyline points="{{ xpoint|add:5 }},50 {{ xpoint|add:5 }},180" style="fill: none; stroke: black"/>
+                        <text x="{{ xpoint|add:7 }}" y="125" fill="black" font-size="{{ font_size_buy }}">don't buy</text>
+                    {% endfor %}
+                    {% for str, xpoints in GTpayoffs_str %}
+                        <a data-toggle="tooltip" data-placement="bottom" title="{{ tooltip_payoff }}">
+                            <text class="gtoutcome" x="{{ xpoints }}" y="200" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                        </a>
+                    {% endfor %}
+                    {% for str, xpoints in GTpayoffN %}
+                        <a data-toggle="tooltip" data-placement="bottom" title="{{ tooltip_payoff }}">
+                            <text class="gtoutcome" x="{{ xpoints|add:add_to_last_payoff }}" y="55" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                        </a>
+                    {% endfor %}
+
+                </svg>
+            </div>
+
+        <!-- Game Tree  vertical -->
+        {% elif graph == 'vertical' %}
+            <div style="width: 80%; margin-left: auto; margin-right: auto">
+                <svg width="60%" height="{{ height }}px" style="transform: scale(1)">
+
+                    <!-- nodes -->
+                    {% for index, price, xpoint in GameTree %}
+                        <a data-toggle="tooltip" data-placement="left" title="{{ tooltip_price }}">
+                            <text class="gtprice" x="45" y="{{ xpoint|add:50 }}" fill="black" font-size="{{ font_size_price }}">{% trans "Price" %} {{ index }}</text>
+                        </a>
+                        <circle cx="110" cy="{{ xpoint|add:45 }}" r="5" fill="black" />
+                        <polyline points="110,{{ xpoint|add:40 }} 110,{{ xpoint|add:add_to_last_price }}" style="fill: none; stroke: black"/>
+                        <text x="115" y="{{ xpoint|add:place_of_buy }}" fill="black" font-size="{{ font_size_buy }}">{% trans "buy" %}</text>
+                    {% endfor %}
+
+                    <!-- outcomes -->
+                    {% for index, price, xpoint in GameTree %}
+                        <polyline points="110,{{ xpoint|add:45 }} 240,{{ xpoint|add:45 }}" style="fill: none; stroke: black"/>
+                        <text x="145" y="{{ xpoint|add:40 }}" fill="black" font-size="{{ font_size_buy }}">{% trans "don't buy" %}</text>
+                    {% endfor %}
+                    {% for str, xpoints in GTpayoffs_str %}
+                        <a data-toggle="tooltip" data-placement="right" title="{{ tooltip_payoff }}">
+                            <text class="gtoutcome" x="245" y="{{ xpoints|add:45 }}" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                        </a>
+                    {% endfor %}
+                    {% for str, xpoints in GTpayoffN %}
+                        <a data-toggle="tooltip" data-placement="right" title="{{ tooltip_payoff }}">
+                            <text class="gtoutcome" x="55" y="{{ xpoints|add:add_to_last_payoff }}" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                        </a>
+                    {% endfor %}
+
+                </svg>
+            </div>
+        {% endif %}
+
+        {% blocktrans trimmed %}
+            <p class="instrpar">
+                At the beginning of the game, players do not know their position in the market sequence. Positions are
+                randomly determined, with one chance out of three for each player to be first, second, or third.
+            </p>
+        {% endblocktrans %}
+
+        <hr>
+
+        {% blocktrans trimmed %}
+            <p class="instrheading">
+                Proposed Prices
+            </p>
+            <p class="instrpar">
+                The price P1 that is proposed to the first player is random. This price is a power of 10 and is
+                determined as follows:
+            </p>
+        {% endblocktrans %}
+
+
+            <!-- Price/Probability Table -->
+            <div class="table-responsive" style="max-width: 500px; margin-left: auto; margin-right: auto">
+            <table class="table">
+
+                <!-- Table Header -->
+                <thead>
+                    <tr class="header">
+
+                        <td class="price">
+                            {% blocktrans trimmed %}
+                                Initial Price
+                            {% endblocktrans %}
+                        </td>
+                        <td colspan="2"></td>
+                        <td class="center" colspan="4">
+                            {% blocktrans trimmed %}
+                                Probability that this initial price is realised
+                            {% endblocktrans %}
+                        </td>
+                    </tr>
+                </thead>
+
+                <!-- Table Body -->
+                <tbody>
+                    {% for price, probability in TAB %}
+                        <tr>
+                            <td class="price">
+                                {{ price|intcomma }}
+                            </td>
+                            <td colspan="2"></td>
+                            <td class="center">
+                                {{ probability|floatformat:2|intcomma }} %
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+
+
+        {% blocktrans trimmed %}
+            <p class="instrpar">
+                Players decisions are made simultaneously and privately. For example, if the
+                first price P1
+                =1 has been drawn, the prices that are simultaneously proposed
+                to the three players are P1 =1 for the first player, P2
+                =10 for the second player,
+                and P3 =100 for the third player. Analogously, if the first price P1
+                =10,000 has
+                been drawn, the prices that are simultaneously proposed to the three players are P1
+                = 10,000 for the first player, P2
+                = 100,000 for the second player, and
+                P3
+                =1,000,000 for the third player.
+
+                The prices that have been proposed can give you the following information regarding your position in the
+                market sequence:
+            </p>
+
+            <ul>
+                <li>
+                    If you are offered the opportunity to buy at a price of 1, you are sure to be first.
+                </li>
+                <li>
+                    If you are offered the opportunity to buy at a price of 10, you have one chance out of three of
+                    being first and two chances out of three of being second in the market sequence.
+                </li>
+                <li>
+                    If you are offered the opportunity to buy at a price of 100 or 1000, you have one chance out of
+                    seven of being first, two chances out of seven of being second, and four chances out seven of
+                    being last in the market sequence.
+                </li>
+                <li>
+                    If you are offered the opportunity to buy at a price of 10,000, you have one chance out of four
+                    of being first, one chance out of four of being second, and two chances out four of being last.
+                </li>
+                <li>
+                    If you are offered the opportunity to buy at a price of 100,000, you have one chance out of two
+                    of being second and one chance out of two of being third.
+                </li>
+                <li>
+                    If you are offered the opportunity to buy at a price of 1,000,000, you are sure to be last.
+                </li>
+            </ul>
+
+            <p class="instrpar">
+                To preserve anonymity, a number will be assigned to each player. Once decisions are made, we will tell
+                you (anonymously) the group to which you belong, your position in the market sequence, whether you are
+                offered the opportunity to buy, and your final gain.
+            </p>
+        {% endblocktrans %}
+    </div>
+    </div>
+
+    <div style="text-align: right; padding-top: 5px">
+        {% next_button %}
+    </div>
+
+{% endblock %}
