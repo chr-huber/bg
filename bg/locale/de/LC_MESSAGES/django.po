@@ -1,0 +1,270 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-08-09 09:10+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\bg\config.py:154
+msgid "For each price you have to decide whether to buy the asset."
+msgstr ""
+
+#: .\bg\config.py:155
+msgid ""
+"Payoffs if this point is reached (depending on players' 'buy'- and 'dont't-"
+"buy'-decisions). The first number refers to Player 1's payoff, the second "
+"number refers to Player 2's payoff, and so forth."
+msgstr ""
+
+#: .\bg\models.py:212
+msgid ""
+"Is it possible to be first and be proposed to buy at a price of 100,000?"
+msgstr ""
+
+#: .\bg\models.py:213
+msgid "If you are proposed to buy at a price of 1, are you sure to be first?"
+msgstr ""
+
+#: .\bg\models.py:214
+msgid ""
+"If you are proposed to buy at a price of 100,000, are you sure to be second?"
+msgstr ""
+
+#: .\bg\models.py:215
+msgid "If you are proposed to buy at a price of 100, are you sure to be third?"
+msgstr ""
+
+#: .\bg\models.py:216
+msgid ""
+"If you are proposed to buy at a price of 1,000,000, are you sure to be "
+"third ?"
+msgstr ""
+
+#: .\bg\models.py:217
+msgid "If you accept to buy at 100, you will propose to resell at"
+msgstr ""
+
+#: .\bg\models.py:218
+msgid ""
+"If you are first, buy at 100, and resell at 1,000, your payoff in the game is"
+msgstr ""
+
+#: .\bg\models.py:219
+msgid ""
+"If you are first, buy at 100, and find nobody to resell to at 1,000, your "
+"payoff in the game is"
+msgstr ""
+
+#: .\bg\models.py:220
+msgid "If you refuse to buy, your payoff is"
+msgstr ""
+
+#: .\bg\models.py:225
+msgid ""
+"What is the probability of being third in line when you have not been "
+"offered a price yet?"
+msgstr ""
+
+#: .\bg\models.py:226
+msgid "What is the probability of the first price (P1) being 1,000?"
+msgstr ""
+
+#: .\bg\models.py:227
+msgid "What is the probability of the first price (P1) being 100,000?"
+msgstr ""
+
+#: .\bg\models.py:228
+msgid ""
+"If you are offered a price of 1,000, what is the probability of not being "
+"last in line?"
+msgstr ""
+
+#: .\bg\models.py:229
+msgid ""
+"What is your profit when you are first in line and buy but the person next "
+"in line does not buy?"
+msgstr ""
+
+#: .\bg\models.py:230
+msgid ""
+"What is your profit if you are second in line and the person before and "
+"after you in line buy, but you do not buy?"
+msgstr ""
+
+#: .\bg\models.py:231
+msgid ""
+"What is your profit when you are first in line, you decide to buy and the "
+"trader next in line also buys?"
+msgstr ""
+
+#: .\bg\models.py:235 .\bg\templates\bg\Decision.html:109
+msgid "Yes"
+msgstr ""
+
+#: .\bg\models.py:243 .\bg\templates\bg\Decision.html:122
+msgid "No"
+msgstr ""
+
+#: .\bg\pages.py:80 .\bg\pages.py:83
+msgid "You answered Q"
+msgstr ""
+
+#: .\bg\pages.py:80 .\bg\pages.py:83
+msgid " incorrectly."
+msgstr ""
+
+#: .\bg\templates\bg\ControlQuestions.html:28
+msgid "Questionnaire"
+msgstr ""
+
+#: .\bg\templates\bg\ControlQuestions.html:39
+msgid "Please answer the following questions."
+msgstr ""
+
+#: .\bg\templates\bg\ControlQuestions.html:44
+msgid ""
+"The game can only start when each player of the group has correctly answered "
+"all questions."
+msgstr ""
+
+#: .\bg\templates\bg\Decision.html:39
+msgid "Decision"
+msgstr ""
+
+#: .\bg\templates\bg\Decision.html:54
+msgid "If you were proposed to buy the asset at a price of"
+msgstr ""
+
+#: .\bg\templates\bg\Decision.html:58
+msgid "what would you do?"
+msgstr ""
+
+#: .\bg\templates\bg\Decision.html:63
+msgid "Please make a decision."
+msgstr ""
+
+#: .\bg\templates\bg\Decision.html:80
+msgid "Proposed Price"
+msgstr ""
+
+#: .\bg\templates\bg\Decision.html:86
+msgid "Would you buy the asset?"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:29
+msgid "Instructions"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:45
+msgid ""
+"<p class=\"instrheading\"> Exchange Process </p> <p class=\"instrpar\"> To "
+"play this game, we form groups of three players. Each player is endowed with "
+"1 euro that can be used to buy an asset. Your task during the game is thus "
+"to choose whether you want to buy the asset. This asset does not generate "
+"any dividend. If the asset price exceeds 1 euro, you can still buy the "
+"asset. We indeed consider that a financial partner (who is not part of the "
+"game) provides you with the additional capital and shares profits with you "
+"according to the respective capital invested. The market proceeds "
+"sequentially. The first player is offered the opportunity to buy at a price "
+"P1. If he buys, he proposes to sell the asset to the second player at a "
+"price that is 10 times higher, P2=10×P1. If the second player agrees to buy, "
+"the first player ends up the game with 10 euros. The second player then "
+"proposes to sell the asset to the third trader at a price P3=10×P2 =100×P1 . "
+"If the third player buys the asset, the second player ends up the game with "
+"10 euros. The third player does not find anyone to whom he can sell the "
+"asset. Since this asset does not generate any dividend, he ends up the game "
+"with 0 euros. This game is summarized in the following figure. </p>"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:73
+#: .\bg\templates\bg\Instructions.html:107
+ .\bg\templates\bg\Results.html:115
+msgid "Price"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:111
+ .\bg\templates\bg\Results.html:76
+msgid "buy"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:117
+ .\bg\templates\bg\Results.html:80
+msgid "don't buy"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:134
+msgid ""
+"<p class=\"instrpar\"> At the beginning of the game, players do not know "
+"their position in the market sequence. Positions are randomly determined, "
+"with one chance out of three for each player to be first, second, or third. "
+"</p>"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:143
+msgid ""
+"<p class=\"instrheading\"> Proposed Prices </p> <p class=\"instrpar\"> The "
+"price P1 that is proposed to the first player is random. This price is a "
+"power of 10 and is determined as follows: </p>"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:163
+msgid "Initial Price"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:169
+msgid "Probability that this initial price is realised"
+msgstr ""
+
+#: .\bg\templates\bg\Instructions.html:194
+msgid ""
+"<p class=\"instrpar\"> Players decisions are made simultaneously and "
+"privately. For example, if the first price P1 =1 has been drawn, the prices "
+"that are simultaneously proposed to the three players are P1 =1 for the "
+"first player, P2 =10 for the second player, and P3 =100 for the third "
+"player. Analogously, if the first price P1 =10,000 has been drawn, the "
+"prices that are simultaneously proposed to the three players are P1 = 10,000 "
+"for the first player, P2 = 100,000 for the second player, and P3 =1,000,000 "
+"for the third player. The prices that have been proposed can give you the "
+"following information regarding your position in the market sequence: </p> "
+"<ul> <li> If you are offered the opportunity to buy at a price of 1, you are "
+"sure to be first. </li> <li> If you are offered the opportunity to buy at a "
+"price of 10, you have one chance out of three of being first and two chances "
+"out of three of being second in the market sequence. </li> <li> If you are "
+"offered the opportunity to buy at a price of 100 or 1000, you have one "
+"chance out of seven of being first, two chances out of seven of being "
+"second, and four chances out seven of being last in the market sequence. </"
+"li> <li> If you are offered the opportunity to buy at a price of 10,000, you "
+"have one chance out of four of being first, one chance out of four of being "
+"second, and two chances out four of being last. </li> <li> If you are "
+"offered the opportunity to buy at a price of 100,000, you have one chance "
+"out of two of being second and one chance out of two of being third. </li> "
+"<li> If you are offered the opportunity to buy at a price of 1,000,000, you "
+"are sure to be last. </li> </ul> <p class=\"instrpar\"> To preserve "
+"anonymity, a number will be assigned to each player. Once decisions are "
+"made, we will tell you (anonymously) the group to which you belong, your "
+"position in the market sequence, whether you are offered the opportunity to "
+"buy, and your final gain. </p>"
+msgstr ""
+
+#: .\bg\templates\bg\Results.html:17
+msgid "Results"
+msgstr ""
+
+#: .\bg\templates\bg\Results.html:98
+#, python-format
+msgid ""
+"You were in position %(position)s. Your payoff is %(earnings)s "
+"%(exp_currency)s."
+msgstr ""

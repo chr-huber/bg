@@ -1,0 +1,185 @@
+/* =============================================== */
+/* Instructions */
+/* =============================================== */
+
+.instructions {
+	width:100%;
+	height:100%;
+	background:rgba(255,255,225,0.25);
+	margin:20px auto;
+    padding: 20px 20px 10px 20px;
+
+    position:relative;
+    -webkit-box-shadow:0 1px 5px rgba(0, 0, 0, 0.2), 0 0 30px rgba(0, 0, 0, 0.05) inset;
+       -moz-box-shadow:0 1px 5px rgba(0, 0, 0, 0.2), 0 0 30px rgba(0, 0, 0, 0.05) inset;
+            box-shadow:0 1px 5px rgba(0, 0, 0, 0.2), 0 0 30px rgba(0, 0, 0, 0.05) inset;
+
+    -moz-border-radius: 8px/8px;
+         border-radius: 8px/8px;
+}
+
+.instructions:before, .instructions:after {
+	content:"";
+    position:absolute;
+    z-index:-1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    -webkit-box-shadow:2px 4px 16px rgba(0,0,0,0.2);
+       -moz-box-shadow:2px 4px 16px rgba(0,0,0,0.2);
+            box-shadow:2px 4px 16px rgba(0,0,0,0.2);
+
+    -moz-border-radius: 8px/8px;
+         border-radius: 8px/8px;
+}
+
+.instrpar {
+    margin-left: 15px;
+    margin-right: 30px;
+    text-align: justify;
+}
+
+.instrheading {
+    margin-left: 15px;
+    margin-right: 30px;
+    text-align: center;
+    font-style: italic;
+}
+
+/* =============================================== */
+/* Game Tree Graph */
+/* =============================================== */
+.gtprice:hover {
+    fill-opacity: 0.5;
+}
+.gtoutcome:hover {
+    fill-opacity: 0.5;
+}
+
+
+/* =============================================== */
+/* Results */
+/* =============================================== */
+
+.info {
+    padding: 15px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+
+/* =============================================== */
+/* Table */
+/* =============================================== */
+
+.panel,
+.progress {
+    min-width: 660px;
+    max-width: 720px;
+}
+
+.table>tbody>tr>th,
+.table>tbody>tr>td {
+    vertical-align: middle!important;
+    padding: 10px 2px 10px 2px;
+}
+
+.panel-heading>.table,
+.panel-heading>.table th {
+    margin: 0px;
+    border: 0px;
+}
+
+.panel-heading {
+    padding: 0px;
+}
+
+.pie-chart {
+    max-width: 35px;
+    margin: 0 auto;
+}
+
+.formfield {
+    width: 80px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.lottery-a {
+    min-width: 240px;
+    width: 240px;
+    text-align: right;
+}
+
+.lottery-b {
+    min-width: 240px;
+    width: 240px;
+    text-align: left;
+}
+
+
+/* =============================================== */
+/* Forms */
+/* =============================================== */
+input[type="radio"]{
+    margin: 7.5px;
+}
+
+
+/* =============================================== */
+/* Progress Bar */
+/* =============================================== */
+.progress {
+    height: 15px;
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    background-color: rgba(91, 192, 222, 0.10);
+    background-image: linear-gradient(to bottom, rgba(91, 192, 222, 0.05) 0, rgba(91, 192, 222, 0.25) 100%);
+    background-repeat: repeat-x;
+    filter:
+}
+
+label {
+    font-weight: normal;
+    margin-bottom: 4pt;
+}
+
+
+/* =============================================== */
+/* Buttons */
+/* =============================================== */
+.btn-primary{
+	background-color: rgb(0, 51, 98, 1);
+    border-color: rgb(0, 51, 98, 1);
+}
+.btn-primary:hover{
+    background-color: rgb(0, 51, 98, 0.5);
+}
+.btn-primary:checked {
+    background-color: black;
+}
+
+/* =============================================== */
+/* Price/Probability Table */
+/* =============================================== */
+
+.table>thead>tr>th,
+.table>tbody>tr>td {
+    vertical-align: middle;
+}
+
+.header {
+    background-color: #f1f1f1;
+}
+
+.position,
+.price {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}
