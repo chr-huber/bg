@@ -1,0 +1,153 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+{% load humanize %}
+{% load i18n %}
+
+
+{#--- SCRIPTS --------------------------------------------------------------------------------------------------------#}
+
+{% block scripts %}
+
+    {% if Constants.enforce_consistency == True %}
+        {% if Constants.one_choice_per_page == False and Constants.order == 'ascending' %}
+            <script src="{% static 'bg/js/consistency_ascending.js' %}"></script>
+        {% elif Constants.one_choice_per_page == False and Constants.order == 'descending' %}
+            <script src="{% static 'bg/js/consistency_descending.js' %}"></script>
+        {% endif %}
+    {% endif %}
+
+    <script>
+        function CaptureRelevantBuy() {
+            var relevant_buy = document.getElementsByName({{ relevant_buy_str|json }}).value;
+            document.getElementById("RelevantBuy").value = relevant_buy;
+        }
+    </script>
+
+{% endblock %}
+
+
+{#--- STYLES ---------------------------------------------------------------------------------------------------------#}
+
+{% block styles %}
+    <link href="{% static 'bg/css/custom.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+
+{#--- TITLE ----------------------------------------------------------------------------------------------------------#}
+
+{% block title %}
+    {% blocktrans trimmed %}
+        Decision
+    {% endblocktrans %}
+{% endblock %}
+
+
+{#--- CONTENT --------------------------------------------------------------------------------------------------------#}
+
+{% block content %}
+
+    <div class="card">
+
+        <!-- Header: Question whether to buy if <one_price_per_page = True>; otherwise 'Please make a decision' -->
+        <div class="card-header">
+            {% if one_choice_per_page == True %}
+                {% blocktrans trimmed %}
+                    If you were proposed to buy the asset at a price of
+                {% endblocktrans %}
+                {{ price|intcomma }} {{ exp_currency }},
+                {% blocktrans trimmed %}
+                    what would you do?
+                {% endblocktrans %}
+                <br>
+            {% else %}
+                {% blocktrans trimmed %}
+                    Please make a decision.
+                {% endblocktrans %}
+            {% endif %}
+        </div>
+
+        <div class="card-body">
+
+            <!-- Decision Table -->
+            <div class="table-responsive">
+            <table class="table">
+
+                <!-- Table Header -->
+                <thead>
+                    <tr class="header">
+
+                        <td class="price">
+                            {% blocktrans trimmed %}
+                                Proposed Price
+                            {% endblocktrans %}
+                        </td>
+                        <td colspan="2"></td>
+                        <td class="center" colspan="4">
+                            {% blocktrans trimmed %}
+                                Would you buy the asset?
+                            {% endblocktrans %}
+                        </td>
+                    </tr>
+                </thead>
+
+                <!-- Table Body -->
+                <tbody>
+                    {% for index, price in prices %}
+                    <tr>
+
+                        <td class="price">
+                            {{ price|intcomma }}
+                        </td>
+
+                        <td colspan="2"></td>
+
+                        <!-- radio select form fields -->
+                        {% if buttons == False or one_choice_per_page == False %}
+
+                            <td class="option_left">
+                                <label class="btn btn-light" for="buy{{ index }}">
+                                    {% trans "Yes" %}
+                                </label>
+                            </td>
+
+                            <td class="formfield">
+                                <input type="radio" name="buy_{{ index }}" id="buy{{ index }}" value="1" required>
+                            </td>
+                            <td  class="formfield">
+                                <input type="radio" name="buy_{{ index }}" id="dbuy{{ index }}" value="0" required>
+                            </td>
+
+                            <td class="option_right">
+                                <label class="btn btn-light" for="dbuy{{ index }}">
+                                    {% trans "No" %}
+                                </label>
+                            </td>
+
+                        <!-- button form fields -->
+                        {% else %}
+
+                            <td class="button_left">
+                                <button class="btn btn-primary btn-table" name="buy_{{ index }}" value="1">Yes</button>
+                            </td>
+                            <td class="button_right">
+                                <button class="btn btn-primary btn-table" name="buy_{{ index }}" value="0">No</button>
+                            </td>
+
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    {% if buttons == False or one_choice_per_page == False %}
+        <!-- Next Button if <buttons = False> -->
+        <div onClick="CaptureRelevantBuy()" style="text-align: right; padding-top: 5px">
+            <button class="btn btn-primary">Next</button>
+        </div>
+    {% endif %}
+
+{% endblock %}

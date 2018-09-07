@@ -1,0 +1,182 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+{% load humanize %}
+{% load i18n %}
+
+
+{#--- STYLES ---------------------------------------------------------------------------------------------------------#}
+
+{% block styles %}
+    <link href="{% static 'bg/css/custom.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+
+{#--- TITLE ----------------------------------------------------------------------------------------------------------#}
+
+{% block title %}
+    {% blocktrans trimmed %}
+        Results
+    {% endblocktrans %}
+{% endblock %}
+
+
+{#--- CONTENT --------------------------------------------------------------------------------------------------------#}
+
+{% block content %}
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+            <table class="table">
+
+                <!-- Table Header -->
+                <thead>
+                    <tr class="header">
+                        <td></td>
+                        <td class="price">
+                            {% trans "Price" %}
+                        </td>
+                        <td>
+                            {% trans "Player" %}
+                        </td>
+                        <td>
+                            {% trans "Decision" %}
+                        </td>
+                        <td>
+                            {% trans "Payoff" %}
+                        </td>
+                    </tr>
+                </thead>
+
+                <!-- Table Body -->
+                <tbody>
+                    {% for index, pos, price, player, realisation, payoff in results %}
+                        {% if pos == position %}
+                        <tr style="background-color: #dff0d8">
+                        {% else %}
+                        <tr>
+                        {% endif %}
+                            <td>
+                                {% if pos == 1 %}
+                                    {% trans "Initial Price" %}
+                                {% else %}
+                                    {% trans "Price at Position" %} {{ pos }}
+                                {% endif %}
+                            </td>
+                            <td class="price">
+                                {{ price|intcomma }} {{ exp_currency }}
+                            </td>
+                            <td>
+                                {{ index }}
+                            </td>
+                            <td>
+                                {% if realisation == 1 %}
+                                    {% blocktrans trimmed %}
+                                        buy
+                                    {% endblocktrans %}
+                                {% elif realisation == 0 %}
+                                    {% blocktrans trimmed %}
+                                        don't buy
+                                    {% endblocktrans %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ payoff }} {{ exp_currency }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+            </div>
+
+        </div>
+
+        <div class="card-footer center">
+            {% blocktrans trimmed %}
+                You were in position {{ position }}. Your payoff is {{ earnings }} {{ exp_currency }}.
+            {% endblocktrans %}
+        </div>
+
+    </div>
+
+
+    <!-- Game Tree  horizontal -->
+    {% if graph == 'horizontal' %}
+        <div style="margin-left: 20px; margin-right: auto">
+            <svg width="800px" height="230px" style="transform: scale(0.9)">
+
+                <!-- nodes -->
+                {% for index, price, xpoint in GameTree %}
+                    <a data-toggle="tooltip" data-placement="top" title="{{ tooltip_price }}">
+                        <text class="gtprice" x="{{ xpoint }}" y="40" fill="black" font-size="{{ font_size_price }}">{% trans "Price" %} {{ index }}</text>
+                    </a>
+                    <circle cx="{{ xpoint|add:5 }}" cy="50" r="5" fill="black" />
+                    <polyline points="{{ xpoint }},50 {{ xpoint|add:add_to_last_price }},50" style="fill: none; stroke: black"/>
+                    <text x="{{ xpoint|add:place_of_buy }}" y="65" fill="black" font-size="{{ font_size_buy }}">buy</text>
+                {% endfor %}
+
+                <!-- outcomes -->
+                {% for index, price, xpoint in GameTree %}
+                    <polyline points="{{ xpoint|add:5 }},50 {{ xpoint|add:5 }},180" style="fill: none; stroke: black"/>
+                    <text x="{{ xpoint|add:7 }}" y="125" fill="black" font-size="{{ font_size_buy }}">don't buy</text>
+                {% endfor %}
+                {% for str, xpoints in GTpayoffs_str %}
+                    <a data-toggle="tooltip" data-placement="bottom" title="{{ tooltip_payoff }}">
+                        <text class="gtoutcome" x="{{ xpoints }}" y="200" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                    </a>
+                {% endfor %}
+                {% for str, xpoints in GTpayoffN %}
+                    <a data-toggle="tooltip" data-placement="bottom" title="{{ tooltip_payoff }}">
+                        <text class="gtoutcome" x="{{ xpoints|add:add_to_last_payoff }}" y="55" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                    </a>
+                {% endfor %}
+
+            </svg>
+        </div>
+
+    <!-- Game Tree  vertical -->
+    {% elif graph == 'vertical' %}
+        <div style="width: 80%; margin-left: auto; margin-right: auto">
+            <svg width="60%" height="{{ height }}px" style="transform: scale(1)">
+
+                <!-- nodes -->
+                {% for index, price, xpoint in GameTree %}
+                    <a data-toggle="tooltip" data-placement="left" title="{{ tooltip_price }}">
+                        <text class="gtprice" x="45" y="{{ xpoint|add:50 }}" fill="black" font-size="{{ font_size_price }}">Price {{ index }}</text>
+                    </a>
+                    <circle cx="110" cy="{{ xpoint|add:45 }}" r="5" fill="black" />
+                    <polyline points="110,{{ xpoint|add:40 }} 110,{{ xpoint|add:add_to_last_price }}" style="fill: none; stroke: black"/>
+                    <text x="115" y="{{ xpoint|add:place_of_buy }}" fill="black" font-size="{{ font_size_buy }}">buy</text>
+                {% endfor %}
+
+                <!-- outcomes -->
+                {% for index, price, xpoint in GameTree %}
+                    <polyline points="110,{{ xpoint|add:45 }} 240,{{ xpoint|add:45 }}" style="fill: none; stroke: black"/>
+                    <text x="145" y="{{ xpoint|add:40 }}" fill="black" font-size="{{ font_size_buy }}">don't buy</text>
+                {% endfor %}
+                {% for str, xpoints in GTpayoffs_str %}
+                    <a data-toggle="tooltip" data-placement="right" title="{{ tooltip_payoff }}">
+                        <text class="gtoutcome" x="245" y="{{ xpoints|add:45 }}" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                    </a>
+                {% endfor %}
+                {% for str, xpoints in GTpayoffN %}
+                    <a data-toggle="tooltip" data-placement="right" title="{{ tooltip_payoff }}">
+                        <text class="gtoutcome" x="55" y="{{ xpoints|add:add_to_last_payoff }}" fill="black" font-size="{{ font_size_payoff }}" font-weight="bold">{{ str }}</text>
+                    </a>
+                {% endfor %}
+
+            </svg>
+        </div>
+    {% endif %}
+
+
+    <div style="text-align: right; padding-top: 5px">
+        {% next_button %}
+    </div>
+
+{% endblock %}
+
+
