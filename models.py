@@ -11,8 +11,7 @@ from scipy.stats import geom, poisson, binom, randint
 
 
 author = """
-Christoph Huber
-christoph.huber@uibk.ac.at
+...
 """
 
 doc = """
