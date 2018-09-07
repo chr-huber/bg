@@ -1,8 +1,6 @@
-# <imports>
 from otree.api import Currency as c
 from otree.constants import BaseConstants
 from django.utils.translation import ugettext as _
-# </imports>
 
 
 #--- Class CONSTANTS ---------------------------------------------------------------------------------------------------
@@ -24,7 +22,7 @@ class Constants(BaseConstants):
     # number of repetitions of the game
     num_repetitions = 1
 
-    # group subjects randomly (if <num_players  > 1>)
+    # group subjects randomly (if <num_players > 1>)
     # if <random_grouping = False>, then subjects will be assigned to groups according to the time
     # they enter the experiment
     random_grouping = False
@@ -33,20 +31,20 @@ class Constants(BaseConstants):
     multiple = 10
 
     # distribution for initial prices
-    #
+    # set the distribution from which to draw x for the initial price of <multiple> to the power of x:
+    # 'geometric', 'Poisson', 'binomial', or 'uniform'
     dist_initprices = 'geometric'
 
     # parameter p for geometric distribution and binomial distribution, and lambda for Poisson distribution,
     # respectively;
-    # ...
     p = 0.5
 
     # parameter N for binomial distribution and uniform distribution, respectively
-    # ...
     N = 4
 
     # cap on the initial price
     # if <cap = 0>, then there is no cap on the initial price
+    # if <cap > 0>, then the cap is set at <cap>
     cap = 0
 
     # earnings if no action is realised, i.e. the player does not buy the asset
@@ -58,7 +56,6 @@ class Constants(BaseConstants):
     # Set <strategy_method = True> to use the strategy method, i.e. to elicit subjects' choices for each
     # possible price; if <strategy_method = False>, only one price is offered to each player
     strategy_method = True
-
 
     # ---------------------------------------------------------------------------------------------------------------- #
     # --- Overall Settings and Appearance --- #
@@ -104,7 +101,7 @@ class Constants(BaseConstants):
     # show control questions page
     # if <controlquestions = True>, a separate template "ControlQuestions.html" is rendered
     # after the Instructions (if <instructions = True>) and prior to the task
-    controlquestions = True
+    controlquestions = False
 
     # select control questions
     # each control question has a number (1 to 16); write which ones you want to include;
@@ -122,7 +119,7 @@ class Constants(BaseConstants):
 
     # show results page summarizing the game's outcome including payoff information
     # if <results = True>, a separate page containing all relevant information is displayed after finishing the task
-    # if <results = False>, the template "Decision.html" will not be rendered
+    # if <results = False>, the template "Results.html" will not be rendered
     results = True
 
     # show graphical decision tree in the results
@@ -131,10 +128,8 @@ class Constants(BaseConstants):
     # <graph = 'vertical'> for price sequence in vertical order
     graph_results = 'horizontal'
 
-
     # set the experimental currency
     exp_currency = 'ECU'
-
 
     # ---------------------------------------------------------------------------------------------------------------- #
     # --- oTree Settings etc. (Don't Modify) --- #

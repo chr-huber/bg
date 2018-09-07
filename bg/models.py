@@ -12,7 +12,7 @@ from scipy.stats import geom, poisson, binom, randint
 
 author = """
 Christoph Huber
-Email: christoph.huber@uibk.ac.at
+christoph.huber@uibk.ac.at
 """
 
 doc = """
@@ -356,6 +356,18 @@ class Group(BaseGroup):
 
         for p in self.get_players():
 
+            if Constants.one_choice_per_page and Constants.strategy_method:
+
+                if Constants.order == 'descending':
+                    p.participant.vars['buys'] = p.participant.vars['buys'][::-1]
+                if Constants.order == 'random':
+                    indices, x = zip(*p.participant.vars['prices_displayed'])
+                    buys = sorted(list(zip(indices, x, p.participant.vars['buys'])), key=lambda x: x[0])
+                    x, y, buys = zip(*buys)
+                    p.participant.vars['buys'] = list(buys)
+
+        for p in self.get_players():
+
             p.participant.vars['price_choice_match'] = sorted(price_choice_match)
             price_choice_match = sorted(price_choice_match)
 
@@ -369,29 +381,14 @@ class Group(BaseGroup):
                 p.participant.vars['others'] = p.others
                 p.participant.vars['others1'] = p.others1
 
-                if Constants.order == 'descending':
-                    p.participant.vars['buys'] = p.participant.vars['buys'][::-1]
-
-                if Constants.strategy_method:
-                    if p.id_in_group == 1:
-                        if Constants.order == 'ascending':
-                            p.relevant_realisations = [p.participant.vars['buys'][price_choice_match[0]-1]] + [c for a, b, c in p.others1 if a == 2 and b == price_choice_match[1]]
-                        elif Constants.order == 'descending':
-                            p.relevant_realisations = [p.participant.vars['buys'][price_choice_match[0]-1]] + [c for a, b, c in p.others1 if a == Constants.num_players-1 and b == price_choice_match[0]]
-                    elif p.id_in_group == Constants.num_players:
-                        p.relevant_realisations = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1] + [p.participant.vars['buys'][price_choice_match[Constants.num_players-1]-1]]
-                    else:
-                        p.relevant_realisations_below = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1 and a < getattr(p, 'id_in_group')]
-                        p.relevant_realisations_above = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1 and a > getattr(p, 'id_in_group')]
-                        p.relevant_realisations = p.relevant_realisations_below + [p.participant.vars['buys'][price_choice_match[getattr(p, 'id_in_group')-1]-1]] + p.relevant_realisations_above
-
+                if p.id_in_group == 1:
+                    p.relevant_realisations = [p.participant.vars['buys'][price_choice_match[0]-1]] + [c for a, b, c in p.others1 if a == 2 and b == price_choice_match[1]]
+                elif p.id_in_group == Constants.num_players:
+                    p.relevant_realisations = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1] + [p.participant.vars['buys'][price_choice_match[Constants.num_players-1]-1]]
                 else:
-                    if p.id_in_group == 1:
-                        p.relevant_realisations = [int(getattr(p, 'buy_' + str(p.id_in_group)))] + [int(getattr(j, 'buy_' + str(j.id_in_group))) for j in p.get_others_in_group() if getattr(j, 'id_in_group') == 2]
-                    elif p.id_in_group == Constants.num_players:
-                        p.relevant_realisations = [int(getattr(j, 'buy_' + str(j.id_in_group))) for j in p.get_others_in_group()] + [int(getattr(p, 'buy_' + str(p.id_in_group)))]
-                    else:
-                        p.relevant_realisations = [int(getattr(j, 'buy_' + str(j.id_in_group))) for j in p.get_others_in_group() if getattr(j, 'id_in_group') < p.id_in_group] + [int(getattr(p, 'buy_' + str(p.id_in_group)))] + [int(getattr(j, 'buy_' + str(j.id_in_group))) for j in p.get_others_in_group() if getattr(j, 'id_in_group') > p.id_in_group]
+                    p.relevant_realisations_below = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1 and a < getattr(p, 'id_in_group')]
+                    p.relevant_realisations_above = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1 and a > getattr(p, 'id_in_group')]
+                    p.relevant_realisations = p.relevant_realisations_below + [p.participant.vars['buys'][price_choice_match[getattr(p, 'id_in_group')-1]-1]] + p.relevant_realisations_above
 
             else:
                 if p.id_in_group == 1:
@@ -461,9 +458,10 @@ class Player(BasePlayer):
                 form_fields = [self.participant.vars['form_fields'][page - 1]]
 
                 if Constants.order == 'ascending':
-                    # buys = [int(getattr(j, 'buy_' + str(j.group.subsession.round_number))) for j in self.in_all_rounds() if getattr(j, 'round_number') <= Constants.num_players]
                     buys = [int(getattr(j, 'buy_' + str(j.group.subsession.round_number - page_repetition[j.group.subsession.round_number - 1] * Constants.num_prices))) for j in self.in_all_rounds() if getattr(j, 'round_number') in range(int(Constants.num_prices * (repetition - 1) + 1), int(Constants.num_prices * repetition + 1))]
                 elif Constants.order == 'descending':
+                    buys = [int(getattr(j, 'buy_' + str(self.participant.vars['prices_displayed'][getattr(j, 'round_number')-1][0]))) for j in self.in_all_rounds()]
+                else:
                     buys = [int(getattr(j, 'buy_' + str(self.participant.vars['prices_displayed'][getattr(j, 'round_number')-1][0]))) for j in self.in_all_rounds()]
 
             else:
