@@ -3,7 +3,7 @@ from otree.constants import BaseConstants
 from django.utils.translation import ugettext as _
 
 
-#--- Class CONSTANTS ---------------------------------------------------------------------------------------------------
+# --- Class CONSTANTS --------------------------------------------------------------------------------------------------
 
 class Constants(BaseConstants):
 
@@ -11,7 +11,7 @@ class Constants(BaseConstants):
     # --- Game-specific Settings --- #
     # ---------------------------------------------------------------------------------------------------------------- #
 
-    # number of players per group (if <multiplayer = True>)
+    # number of players per group
     # this is also the number of relevant decisions for subjects' payoffs
     num_players = 3
 
@@ -39,22 +39,23 @@ class Constants(BaseConstants):
     # respectively;
     p = 0.5
 
-    # parameter N for binomial distribution and uniform distribution, respectively
-    N = 4
+    # parameter n for binomial distribution and uniform distribution, respectively
+    n = 4
 
     # cap on the initial price
     # if <cap = 0>, then there is no cap on the initial price
     # if <cap > 0>, then the cap is set at <cap>
-    cap = 0
+    cap = 10000
 
     # earnings if no action is realised, i.e. the player does not buy the asset
     earnings_noaction = 1
 
-    # earnings if a player succeeds in reselling the asset
-    earnings_success = 10
+    # earnings if a player succeeds in reselling the asset; by default this variable is set to <multiple>
+    earnings_success = multiple
 
     # Set <strategy_method = True> to use the strategy method, i.e. to elicit subjects' choices for each
-    # possible price; if <strategy_method = False>, only one price is offered to each player
+    # possible price; if <strategy_method = False>, only one price is offered to each player - note that this
+    # requires <one_choice_per_page = True> (below)!
     strategy_method = True
 
     # ---------------------------------------------------------------------------------------------------------------- #
@@ -62,15 +63,18 @@ class Constants(BaseConstants):
     # ---------------------------------------------------------------------------------------------------------------- #
 
     # order of choices
-    # if <order = 'random'>, then the choices will appear in random order
     # if <order = 'ascending'>, then the choices will appear in ascending order
     # if <order = 'descending'>, then the choices will appear in descending order
-    order = 'random'
+    # if <order = 'random'>, then the choices will appear in random order
+    order = 'ascending'
 
     # show each lottery pair on a separate page
     # if <one_choice_per_page = True>, each single binary choice between lottery "A" and "B" is shown on a separate page
     # if <one_choice_per_page = False>, all <num_choices> choices are displayed in a table on one page
-    one_choice_per_page = True
+    one_choice_per_page = False
+
+    if strategy_method == False:
+        one_choice_per_page = True
 
     # show choices as buttons instead of radio inputs if <one_choice_per_page = True>
     buttons = True
@@ -80,7 +84,7 @@ class Constants(BaseConstants):
     # are automatically selected; similarly, all "true" announcements below a selected "true announcement
     # are automatically checked, implying consistent choices;
     # note that <enforce_consistency> is only implemented if <one_choice_per_page = False> and <random_order = False>
-    enforce_consistency = True
+    enforce_consistency = False
 
     # show instructions page
     # if <instructions = True>, a separate template "Instructions.html" is rendered prior to the task

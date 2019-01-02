@@ -47,18 +47,18 @@
                 Exchange Process
             </p>
             <p class="instrpar">
-                To play this game, we form groups of three players. Each player is endowed with 1 euro that can be used
+                To play this game, we form groups of three players. Each player is endowed with 1 {{ exp_currency }} that can be used
                 to buy an asset. Your task during the game is thus to choose whether you want to buy the asset. This
-                asset does not generate any dividend. If the asset price exceeds 1 euro, you can still buy the asset. We
+                asset does not generate any dividend. If the asset price exceeds 1 {{ exp_currency }}, you can still buy the asset. We
                 indeed consider that a financial partner (who is not part of the game) provides you with the additional
                 capital and shares profits with you according to the respective capital invested. The market proceeds
                 sequentially. The first player is offered the opportunity to buy at a price P1.
                 If he buys, he proposes to sell the asset to the second player at a price that is 10 times higher,
-                P2=10×P1. If the second player agrees to buy, the first player ends up the game with 10 euros.
+                P2=10×P1. If the second player agrees to buy, the first player ends up the game with 10 {{ exp_currency }}s.
                 The second player then proposes to sell the asset to the third trader at a price
-                P3=10×P2 =100×P1 . If the third player buys the asset, the second player ends up the game with 10 euros.
+                P3=10×P2 =100×P1 . If the third player buys the asset, the second player ends up the game with 10 {{ exp_currency }}s.
                 The third player does not find anyone to whom he can sell the asset. Since this asset does not generate
-                any dividend, he ends up the game with 0 euros. This game is summarized in the following figure.
+                any dividend, he ends up the game with 0 {{ exp_currency }}s. This game is summarized in the following figure.
             </p>
         {% endblocktrans %}
 
@@ -238,7 +238,7 @@
 
             <p class="instrpar">
                 To preserve anonymity, a number will be assigned to each player. Once decisions are made, we will tell
-                you (anonymously) the group to which you belong, your position in the market sequence, whether you are
+                you (anonymously) your position in the market sequence, whether you are
                 offered the opportunity to buy, and your final gain.
             </p>
         {% endblocktrans %}

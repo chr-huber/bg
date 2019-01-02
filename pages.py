@@ -6,7 +6,7 @@ from django.utils.translation import ugettext as _
 import math
 
 
-#--- Instructions ------------------------------------------------------------------------------------------------------
+# --- Instructions -----------------------------------------------------------------------------------------------------
 
 class Instructions(Page):
 
@@ -54,11 +54,12 @@ class Instructions(Page):
             'num_players': Constants.num_players,
             'tooltip_price': Constants.tooltip_price,
             'tooltip_payoff': Constants.tooltip_payoff,
-            'TAB': self.player.participant.vars['TAB']
+            'TAB': self.player.participant.vars['TAB'],
+            'exp_currency': Constants.exp_currency
         }
 
 
-#--- ControlQuestions --------------------------------------------------------------------------------------------------
+# --- ControlQuestions -------------------------------------------------------------------------------------------------
 
 class ControlQuestions(Page):
 
@@ -93,7 +94,7 @@ class ControlQuestions(Page):
 
 
 
-#--- Decision ----------------------------------------------------------------------------------------------------------
+# --- Decision ---------------------------------------------------------------------------------------------------------
 
 class Decision(Page):
 
@@ -202,7 +203,7 @@ class Decision(Page):
         self.player.set_repetition()
 
 
-#--- ResultsWaitPage ---------------------------------------------------------------------------------------------------
+# --- ResultsWaitPage --------------------------------------------------------------------------------------------------
 
 class ResultsWaitPage(WaitPage):
 
@@ -217,7 +218,8 @@ class ResultsWaitPage(WaitPage):
         self.group.set_results()
 
 
-#--- Results -----------------------------------------------------------------------------------------------------------
+# --- Results ----------------------------------------------------------------------------------------------------------
+
 class Results(Page):
 
     # skip results until last page
@@ -290,11 +292,12 @@ class Results(Page):
             'tooltip_price': Constants.tooltip_price,
             'tooltip_payoff': Constants.tooltip_payoff,
             'TAB': self.player.participant.vars['TAB'],
-            'buys': self.player.participant.vars['buys']
+            'buys': self.player.participant.vars['buys'],
+            'buy': self.player.participant.vars['buy']
         }
 
 
-#--- DecisionWaitPage ---------------------------------------------------------------------------------------------------
+# --- DecisionWaitPage -------------------------------------------------------------------------------------------------
 
 class DecisionWaitPage(WaitPage):
 
@@ -307,7 +310,7 @@ class DecisionWaitPage(WaitPage):
         self.subsession.start_session()
 
 
-#--- Page Sequence -----------------------------------------------------------------------------------------------------
+# --- Page Sequence ----------------------------------------------------------------------------------------------------
 
 page_sequence = [Decision]
 

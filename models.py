@@ -11,15 +11,26 @@ from scipy.stats import geom, poisson, binom, randint
 
 
 author = """
-...
+
+Christoph Huber
+
+Email: christoph.huber@uibk.ac.at
+Web:   chr-huber.github.io
+
 """
 
 doc = """
+
 Bubble Game by Moinas and Pouget (2013), Econometrica 81(4): 1507-1539
+
+and
+
+Speculation Eliciation Task by Janssen, Füllbrunn, and Weitzel (2018), Experimental Economics.
+
 """
 
 
-#--- Class SUBSESSION --------------------------------------------------------------------------------------------------
+# --- Class SUBSESSION -------------------------------------------------------------------------------------------------
 
 class Subsession(BaseSubsession):
 
@@ -71,9 +82,9 @@ class Subsession(BaseSubsession):
                 elif Constants.dist_initprices == 'poisson':
                     n1 = np.random.poisson(Constants.p)
                 elif Constants.dist_initprices == 'binomial':
-                    n1 = np.random.binomial(Constants.N, Constants.p)
+                    n1 = np.random.binomial(Constants.n, Constants.p)
                 elif Constants.dist_initprices == 'uniform':
-                    n1 = np.random.randint(0, Constants.N + 1)
+                    n1 = np.random.randint(0, Constants.n + 1)
                 price1 = Constants.multiple ** (n1 - 1)
             else:
                 while price1 not in possibleinitprices:
@@ -82,9 +93,9 @@ class Subsession(BaseSubsession):
                     elif Constants.dist_initprices == 'poisson':
                         n1 = np.random.poisson(Constants.p)
                     elif Constants.dist_initprices == 'binomial':
-                        n1 = np.random.binomial(Constants.N, Constants.p)
+                        n1 = np.random.binomial(Constants.n, Constants.p)
                     elif Constants.dist_initprices == 'uniform':
-                        n1 = np.random.randint(0, Constants.N + 1)
+                        n1 = np.random.randint(0, Constants.n + 1)
                     price1 = Constants.multiple ** (n1 - 1)
 
             prices = [price1 * (Constants.multiple ** (i - 1)) for i in positions]
@@ -165,7 +176,7 @@ class Subsession(BaseSubsession):
                     elif Constants.dist_initprices == 'poisson':
                         TABprobabilities = [poisson.pmf(j, Constants.p) * 100 for j in range(0, len(TABprices))]
                     elif Constants.dist_initprices == 'binomial':
-                        TABprobabilities = [binom.pmf(j, Constants.N, Constants.p) * 100 for j in range(0, len(TABprices))]
+                        TABprobabilities = [binom.pmf(j, Constants.n, Constants.p) * 100 for j in range(0, len(TABprices))]
                     elif Constants.dist_initprices == 'uniform':
                         TABprobabilities = [randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))] + [100 - sum([randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))])]
 
@@ -176,7 +187,7 @@ class Subsession(BaseSubsession):
                     elif Constants.dist_initprices == 'poisson':
                         TABprobabilities = [poisson.pmf(j, Constants.p) * 100 for j in range(0, len(TABprices)-1)] + [100 - sum([poisson.pmf(j, Constants.p) * 100 for j in range(0, len(TABprices)-1)])]
                     elif Constants.dist_initprices == 'binomial':
-                        TABprobabilities = [binom.pmf(j, Constants.N, Constants.p) * 100 for j in range(0, len(TABprices))] + [100 - sum([binom.pmf(j, Constants.N, Constants.p) * 100 for j in range(0, len(TABprices))])]
+                        TABprobabilities = [binom.pmf(j, Constants.n, Constants.p) * 100 for j in range(0, len(TABprices))] + [100 - sum([binom.pmf(j, Constants.n, Constants.p) * 100 for j in range(0, len(TABprices))])]
                     elif Constants.dist_initprices == 'uniform':
                         TABprobabilities = [randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))] + [100 - sum([randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))])]
 
@@ -332,7 +343,7 @@ class Subsession(BaseSubsession):
                 p.participant.vars['cq_form_fields'] = cq_form_fields
 
 
-#--- Class GROUP -------------------------------------------------------------------------------------------------------
+# --- Class GROUP ------------------------------------------------------------------------------------------------------
 
 class Group(BaseGroup):
 
@@ -374,71 +385,72 @@ class Group(BaseGroup):
             # ----------------------------------------------------------------------------------------------------
             if Constants.one_choice_per_page and Constants.strategy_method:
 
-                p.others = [(getattr(j, 'id_in_group'), k, j.participant.vars['buys'][k - 1]) for k in
+                p.participant.vars['others'] = [(getattr(j, 'id_in_group'), k, j.participant.vars['buys'][k - 1]) for k in
                             range(1, Constants.num_prices + 1) for j in p.in_round(k).get_others_in_group()]
-                p.others1 = [(a, b, c) for a, b, c in p.others if b in price_choice_match]
-                p.participant.vars['others'] = p.others
-                p.participant.vars['others1'] = p.others1
+                p.participant.vars['others1'] = [(a, b, c) for a, b, c in p.participant.vars['others'] if b in price_choice_match]
+                p.participant.vars['others'] = p.participant.vars['others']
+                p.participant.vars['others1'] = p.participant.vars['others1']
 
                 if p.id_in_group == 1:
-                    p.relevant_realisations = [p.participant.vars['buys'][price_choice_match[0]-1]] + [c for a, b, c in p.others1 if a == 2 and b == price_choice_match[1]]
+                    p.participant.vars['relevant_realisations'] = [p.participant.vars['buys'][price_choice_match[0]-1]] + [c for a, b, c in p.participant.vars['others1'] if a == 2 and b == price_choice_match[1]]
                 elif p.id_in_group == Constants.num_players:
-                    p.relevant_realisations = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1] + [p.participant.vars['buys'][price_choice_match[Constants.num_players-1]-1]]
+                    p.participant.vars['relevant_realisations'] = [c for a, b, c in p.participant.vars['others1'] if a == b - price_choice_match[0] + 1] + [p.participant.vars['buys'][price_choice_match[Constants.num_players-1]-1]]
                 else:
-                    p.relevant_realisations_below = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1 and a < getattr(p, 'id_in_group')]
-                    p.relevant_realisations_above = [c for a, b, c in p.others1 if a == b - price_choice_match[0] + 1 and a > getattr(p, 'id_in_group')]
-                    p.relevant_realisations = p.relevant_realisations_below + [p.participant.vars['buys'][price_choice_match[getattr(p, 'id_in_group')-1]-1]] + p.relevant_realisations_above
+                    p.participant.vars['relevant_realisations_below'] = [c for a, b, c in p.participant.vars['others1'] if a == b - price_choice_match[0] + 1 and a < getattr(p, 'id_in_group')]
+                    p.participant.vars['relevant_realisations_above'] = [c for a, b, c in p.participant.vars['others1'] if a == b - price_choice_match[0] + 1 and a > getattr(p, 'id_in_group')]
+                    p.participant.vars['relevant_realisations'] = p.participant.vars['relevant_realisations_below'] + [p.participant.vars['buys'][price_choice_match[getattr(p, 'id_in_group')-1]-1]] + p.participant.vars['relevant_realisations_above']
 
             else:
                 if p.id_in_group == 1:
-                    p.relevant_realisations = [int(getattr(j, 'buy_' + str(price_choice_match[0]+getattr(j, 'id_in_group')-1))) for j in p.get_others_in_group() if getattr(j, 'id_in_group') == 2]
-                    p.relevant_realisations = [int(getattr(p, 'buy_' + str(price_choice_match[0]+p.id_in_group-1)))] + p.relevant_realisations
+                    p.participant.vars['relevant_realisations'] = [int(getattr(j, 'buy_' + str(price_choice_match[0]+getattr(j, 'id_in_group')-1))) for j in p.get_others_in_group() if getattr(j, 'id_in_group') == 2]
+                    p.participant.vars['relevant_realisations'] = [int(getattr(p, 'buy_' + str(price_choice_match[0]+p.id_in_group-1)))] + p.participant.vars['relevant_realisations']
                 elif p.id_in_group == Constants.num_players:
-                    p.relevant_realisations = [int(getattr(j, 'buy_' + str(price_choice_match[0]+getattr(j, 'id_in_group')-1))) for j in p.get_others_in_group()]
-                    p.relevant_realisations = p.relevant_realisations + [int(getattr(p, 'buy_' + str(price_choice_match[0] + p.id_in_group - 1)))]
+                    p.participant.vars['relevant_realisations'] = [int(getattr(j, 'buy_' + str(price_choice_match[0]+getattr(j, 'id_in_group')-1))) for j in p.get_others_in_group()]
+                    p.participant.vars['relevant_realisations'] = p.participant.vars['relevant_realisations'] + [int(getattr(p, 'buy_' + str(price_choice_match[0] + p.id_in_group - 1)))]
                 else:
-                    p.relevant_realisations_below = [
+                    p.participant.vars['relevant_realisations_below'] = [
                         int(getattr(j, 'buy_' + str(price_choice_match[0] + getattr(j, 'id_in_group') - 1))) for j in
                         p.get_others_in_group() if getattr(j, 'id_in_group') < p.id_in_group]
-                    p.relevant_realisations_above = [
+                    p.participant.vars['relevant_realisations_above'] = [
                         int(getattr(j, 'buy_' + str(price_choice_match[0] + getattr(j, 'id_in_group') - 1))) for j in
                         p.get_others_in_group() if getattr(j, 'id_in_group') > p.id_in_group]
-                    p.relevant_realisations = p.relevant_realisations_below + [int(getattr(p, 'buy_' + str(price_choice_match[0] + p.id_in_group - 1)))] + p.relevant_realisations_above
+                    p.participant.vars['relevant_realisations'] = p.participant.vars['relevant_realisations_below'] + [int(getattr(p, 'buy_' + str(price_choice_match[0] + p.id_in_group - 1)))] + p.participant.vars['relevant_realisations_above']
 
-            p.participant.vars['relevant_realisations'] = p.relevant_realisations
+            p.participant.vars['relevant_realisations'] = p.participant.vars['relevant_realisations']
 
             # determine earnings
             # ----------------------------------------------------------------------------------------------------
             p.earnings = 0
 
             if p.id_in_group == 1:
-                if p.relevant_realisations[0] == 0:
+                if p.participant.vars['relevant_realisations'][0] == 0:
                     p.earnings = Constants.earnings_noaction
                 else:
-                    p.earnings = Constants.earnings_noaction - Constants.earnings_noaction * p.relevant_realisations[0] + Constants.earnings_success * p.relevant_realisations[1]
+                    p.earnings = Constants.earnings_noaction - Constants.earnings_noaction * p.participant.vars['relevant_realisations'][0] + Constants.earnings_success * p.participant.vars['relevant_realisations'][1]
             elif p.id_in_group == Constants.num_players:
-                if 0 in p.relevant_realisations[0:p.id_in_group]:
+                if 0 in p.participant.vars['relevant_realisations'][0:p.id_in_group]:
                     p.earnings = Constants.earnings_noaction
                 else:
-                    p.earnings = Constants.earnings_noaction - Constants.earnings_noaction * p.relevant_realisations[Constants.num_players-1]
+                    p.earnings = Constants.earnings_noaction - Constants.earnings_noaction * p.participant.vars['relevant_realisations'][Constants.num_players-1]
             else:
-                if 0 in p.relevant_realisations[0:p.id_in_group]:
+                if 0 in p.participant.vars['relevant_realisations'][0:p.id_in_group]:
                     p.earnings = Constants.earnings_noaction
                 else:
-                    p.earnings = Constants.earnings_noaction - Constants.earnings_noaction * p.relevant_realisations[p.id_in_group - 1] + Constants.earnings_success * p.relevant_realisations[p.id_in_group]
+                    p.earnings = Constants.earnings_noaction - Constants.earnings_noaction * p.participant.vars['relevant_realisations'][p.id_in_group - 1] + Constants.earnings_success * p.participant.vars['relevant_realisations'][p.id_in_group]
 
             # set payoffs
             # ----------------------------------------------------------------------------------------------------
             p.payoff = p.earnings
 
 
-
-#--- Class PLAYER ------------------------------------------------------------------------------------------------------
+# ---- Class PLAYER ----------------------------------------------------------------------------------------------------
 class Player(BasePlayer):
 
     earnings = models.FloatField()
     max_buy = models.IntegerField()
     repetition = models.IntegerField()
+    consistency = models.IntegerField()
+    position = models.IntegerField()
 
     # write <buy_n> decisions in list <buy>
     # ----------------------------------------------------------------------------------------------------
@@ -485,8 +497,21 @@ class Player(BasePlayer):
             buys = self.participant.vars['buy']
         if '1' in buys:
             self.max_buy = max([j for j in range(1, len(buys)+1) if buys[j-1] == '1'])
+            if Constants.enforce_consistency:
+                self.consistency = 1
+            else:
+                if '0' not in buys:
+                    self.consistency = 1
+                else:
+                    if min([j for j in range(1, len(buys) + 1) if buys[j-1] == '0']) > max([j for j in range(1, len(buys) + 1) if buys[j-1] == '1']):
+                        self.consistency = 1
+                    else:
+                        self.consistency = 0
         else:
             self.max_buy = 0
+            self.consistency = 1
+
+        self.position = self.id_in_group
 
     def set_buy_price(self):
         page_repetition = [
@@ -509,25 +534,17 @@ class Player(BasePlayer):
             range(1, Constants.num_rounds + 1)]
         self.repetition = page_repetition[self.round_number - 1] + 1
 
-
-# ::: set model fields for each choice dynamically (added to class player)
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: #
-for i in range(1, Constants.num_prices + 1):
-    Player.add_to_class(
-        'buy_%i' % i,
-            models.CharField()
-    )
-    Player.add_to_class(
-        'buy_%i_price' % i,
-            models.CharField()
-    )
-for i in range(1, len(Constants.controlquestions_set1) + 1):
-    Player.add_to_class(
-        'cq_%i' % i,
-            models.CharField()
-    )
-for i in range(len(Constants.controlquestions_set1) + 1, len(Constants.controlquestions_set1) + 1 + len(Constants.controlquestions_set2)):
-    Player.add_to_class(
-        'cq_%i' % i,
-            models.CharField()
-    )
+    # ::: set model fields for each choice dynamically (added to class player)
+    for i in range(1, Constants.num_prices + 1):
+        locals()['buy_' + str(i)] = models.CharField()
+    del i
+    for i in range(1, Constants.num_prices + 1):
+        locals()['buy_' + str(i) + '_price'] = models.FloatField()
+    del i
+    if Constants.controlquestions:
+        for i in range(1, len(Constants.controlquestions_set1) + 1):
+            locals()['cq_' + str(i)] = models.CharField()
+        del i
+        for i in range(len(Constants.controlquestions_set1) + 1, len(Constants.controlquestions_set1) + 1 + len(Constants.controlquestions_set2)):
+            locals()['cq_' + str(i)] = models.CharField()
+        del i
