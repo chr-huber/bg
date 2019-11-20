@@ -542,9 +542,11 @@ class Player(BasePlayer):
         locals()['buy_' + str(i) + '_price'] = models.FloatField()
     del i
     if Constants.controlquestions:
-        for i in range(1, len(Constants.controlquestions_set1) + 1):
-            locals()['cq_' + str(i)] = models.CharField()
-        del i
-        for i in range(len(Constants.controlquestions_set1) + 1, len(Constants.controlquestions_set1) + 1 + len(Constants.controlquestions_set2)):
-            locals()['cq_' + str(i)] = models.CharField()
-        del i
+        if Constants.controlquestions_set1 != []:
+            for i in range(1, len(Constants.controlquestions_set1) + 1):
+                locals()['cq_' + str(i)] = models.CharField()
+            del i
+        if Constants.controlquestions_set2 != []:
+            for i in range(len(Constants.controlquestions_set1) + 1, len(Constants.controlquestions_set1) + 1 + len(Constants.controlquestions_set2)):
+                locals()['cq_' + str(i)] = models.CharField()
+            del i
