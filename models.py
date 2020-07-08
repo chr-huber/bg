@@ -11,26 +11,15 @@ from scipy.stats import geom, poisson, binom, randint
 
 
 author = """
-
-Christoph Huber
-
-Email: christoph.huber@uibk.ac.at
-Web:   chr-huber.github.io
-
+...
 """
 
 doc = """
-
 Bubble Game by Moinas and Pouget (2013), Econometrica 81(4): 1507-1539
-
-and
-
-Speculation Eliciation Task by Janssen, Füllbrunn, and Weitzel (2018), Experimental Economics.
-
 """
 
 
-# --- Class SUBSESSION -------------------------------------------------------------------------------------------------
+#--- Class SUBSESSION --------------------------------------------------------------------------------------------------
 
 class Subsession(BaseSubsession):
 
@@ -82,9 +71,9 @@ class Subsession(BaseSubsession):
                 elif Constants.dist_initprices == 'poisson':
                     n1 = np.random.poisson(Constants.p)
                 elif Constants.dist_initprices == 'binomial':
-                    n1 = np.random.binomial(Constants.n, Constants.p)
+                    n1 = np.random.binomial(Constants.N, Constants.p)
                 elif Constants.dist_initprices == 'uniform':
-                    n1 = np.random.randint(0, Constants.n + 1)
+                    n1 = np.random.randint(0, Constants.N + 1)
                 price1 = Constants.multiple ** (n1 - 1)
             else:
                 while price1 not in possibleinitprices:
@@ -93,9 +82,9 @@ class Subsession(BaseSubsession):
                     elif Constants.dist_initprices == 'poisson':
                         n1 = np.random.poisson(Constants.p)
                     elif Constants.dist_initprices == 'binomial':
-                        n1 = np.random.binomial(Constants.n, Constants.p)
+                        n1 = np.random.binomial(Constants.N, Constants.p)
                     elif Constants.dist_initprices == 'uniform':
-                        n1 = np.random.randint(0, Constants.n + 1)
+                        n1 = np.random.randint(0, Constants.N + 1)
                     price1 = Constants.multiple ** (n1 - 1)
 
             prices = [price1 * (Constants.multiple ** (i - 1)) for i in positions]
@@ -176,7 +165,7 @@ class Subsession(BaseSubsession):
                     elif Constants.dist_initprices == 'poisson':
                         TABprobabilities = [poisson.pmf(j, Constants.p) * 100 for j in range(0, len(TABprices))]
                     elif Constants.dist_initprices == 'binomial':
-                        TABprobabilities = [binom.pmf(j, Constants.n, Constants.p) * 100 for j in range(0, len(TABprices))]
+                        TABprobabilities = [binom.pmf(j, Constants.N, Constants.p) * 100 for j in range(0, len(TABprices))]
                     elif Constants.dist_initprices == 'uniform':
                         TABprobabilities = [randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))] + [100 - sum([randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))])]
 
@@ -187,7 +176,7 @@ class Subsession(BaseSubsession):
                     elif Constants.dist_initprices == 'poisson':
                         TABprobabilities = [poisson.pmf(j, Constants.p) * 100 for j in range(0, len(TABprices)-1)] + [100 - sum([poisson.pmf(j, Constants.p) * 100 for j in range(0, len(TABprices)-1)])]
                     elif Constants.dist_initprices == 'binomial':
-                        TABprobabilities = [binom.pmf(j, Constants.n, Constants.p) * 100 for j in range(0, len(TABprices))] + [100 - sum([binom.pmf(j, Constants.n, Constants.p) * 100 for j in range(0, len(TABprices))])]
+                        TABprobabilities = [binom.pmf(j, Constants.N, Constants.p) * 100 for j in range(0, len(TABprices))] + [100 - sum([binom.pmf(j, Constants.N, Constants.p) * 100 for j in range(0, len(TABprices))])]
                     elif Constants.dist_initprices == 'uniform':
                         TABprobabilities = [randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))] + [100 - sum([randint.pmf(j, 0, len(TABprices)) * 100 for j in range(1, len(TABprices))])]
 
@@ -343,7 +332,7 @@ class Subsession(BaseSubsession):
                 p.participant.vars['cq_form_fields'] = cq_form_fields
 
 
-# --- Class GROUP ------------------------------------------------------------------------------------------------------
+#--- Class GROUP -------------------------------------------------------------------------------------------------------
 
 class Group(BaseGroup):
 
@@ -443,7 +432,8 @@ class Group(BaseGroup):
             p.payoff = p.earnings
 
 
-# ---- Class PLAYER ----------------------------------------------------------------------------------------------------
+
+#--- Class PLAYER ------------------------------------------------------------------------------------------------------
 class Player(BasePlayer):
 
     earnings = models.FloatField()
@@ -451,6 +441,35 @@ class Player(BasePlayer):
     repetition = models.IntegerField()
     consistency = models.IntegerField()
     position = models.IntegerField()
+
+    # ::: set model fields for each choice dynamically
+    # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: #
+    for i in range(1, Constants.num_prices + 1):
+        locals()['buy_' + str(i)] = models.StringField()
+        locals()['buy_' + str(i) + '_price'] = models.FloatField()
+        # Player.add_to_class(
+        #     'buy_%i' % i,
+        #         models.CharField()
+        # )
+        # Player.add_to_class(
+        #     'buy_%i_price' % i,
+        #         models.FloatField()
+        # )
+    del i
+    for i in range(1, len(Constants.controlquestions_set1) + 1):
+        locals()['cq_' + str(i)] = models.StringField()
+        # Player.add_to_class(
+        #     'cq_%i' % i,
+        #         models.CharField()
+        # )
+    del i
+    for i in range(len(Constants.controlquestions_set1) + 1, len(Constants.controlquestions_set1) + 1 + len(Constants.controlquestions_set2)):
+        locals()['cq_' + str(i)] = models.StringField()
+        # Player.add_to_class(
+        #     'cq_%i' % i,
+        #         models.CharField()
+        # )
+    del i
 
     # write <buy_n> decisions in list <buy>
     # ----------------------------------------------------------------------------------------------------
@@ -533,20 +552,3 @@ class Player(BasePlayer):
             in
             range(1, Constants.num_rounds + 1)]
         self.repetition = page_repetition[self.round_number - 1] + 1
-
-    # ::: set model fields for each choice dynamically (added to class player)
-    for i in range(1, Constants.num_prices + 1):
-        locals()['buy_' + str(i)] = models.CharField()
-    del i
-    for i in range(1, Constants.num_prices + 1):
-        locals()['buy_' + str(i) + '_price'] = models.FloatField()
-    del i
-    if Constants.controlquestions:
-        if Constants.controlquestions_set1 != []:
-            for i in range(1, len(Constants.controlquestions_set1) + 1):
-                locals()['cq_' + str(i)] = models.CharField()
-            del i
-        if Constants.controlquestions_set2 != []:
-            for i in range(len(Constants.controlquestions_set1) + 1, len(Constants.controlquestions_set1) + 1 + len(Constants.controlquestions_set2)):
-                locals()['cq_' + str(i)] = models.CharField()
-            del i

@@ -45,7 +45,7 @@ class Constants(BaseConstants):
     # cap on the initial price
     # if <cap = 0>, then there is no cap on the initial price
     # if <cap > 0>, then the cap is set at <cap>
-    cap = 10000
+    cap = 0
 
     # earnings if no action is realised, i.e. the player does not buy the asset
     earnings_noaction = 1
@@ -56,7 +56,7 @@ class Constants(BaseConstants):
     # Set <strategy_method = True> to use the strategy method, i.e. to elicit subjects' choices for each
     # possible price; if <strategy_method = False>, only one price is offered to each player - note that this
     # requires <one_choice_per_page = True> (below)!
-    strategy_method = True
+    strategy_method = False
 
     # ---------------------------------------------------------------------------------------------------------------- #
     # --- Overall Settings and Appearance --- #
@@ -71,7 +71,7 @@ class Constants(BaseConstants):
     # show each lottery pair on a separate page
     # if <one_choice_per_page = True>, each single binary choice between lottery "A" and "B" is shown on a separate page
     # if <one_choice_per_page = False>, all <num_choices> choices are displayed in a table on one page
-    one_choice_per_page = False
+    one_choice_per_page = True
 
     if strategy_method == False:
         one_choice_per_page = True
@@ -89,7 +89,7 @@ class Constants(BaseConstants):
     # show instructions page
     # if <instructions = True>, a separate template "Instructions.html" is rendered prior to the task
     # if <instructions = False>, the task starts immediately (e.g. in case of printed instructions)
-    instructions = True
+    instructions = False
 
     # number of possible initial prices shown in price/probability-table in the instructions if <cap = 0>;
     # e.g. if <num_instrprices = 2>, then probabilities for possible initial prices 1, 10, and 100 are
@@ -147,4 +147,3 @@ class Constants(BaseConstants):
     tooltip_payoff = _("Payoffs if this point is reached (depending on players' 'buy'- and 'dont't-buy'-decisions). "
                        "The first number refers to Player 1's payoff, the second "
                        "number refers to Player 2's payoff, and so forth.")
-
